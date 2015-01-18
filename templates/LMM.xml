@@ -1,0 +1,31 @@
+<beast version='2.0'      namespace='beast.app.beauti:beast.core:beast.evolution.branchratemodel:beast.evolution.speciation:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.evolution.likelihood:beast.evolution:beast.math.distributions'>
+
+<mergewith point='substModelTemplates'>
+
+<!-- Lie Markov substitution model -->
+        <subtemplate id='LieMarkovModel' class='beast.evolution.substitutionmodel.LieMarkovModel' mainid='LieMarkovModel.s:$(n)'
+		suppressInputs='beast.evolution.substitutionmodel.LieMarkovModel.eigenSystem,
+				beast.evolution.substitutionmodel.LieMarkovModel.count,
+				beast.evolution.substitutionmodel.LieMarkovModel.rates,
+				beast.evolution.substitutionmodel.LieMarkovModel.frequencies,
+				beast.evolution.substitutionmodel.LieMarkovModel.parameters'>
+<![CDATA[
+
+    <substModel spec='beast.evolution.substitutionmodel.LieMarkovModel' id='LieMarkovModel.s:$(n)' model='2.2b' distinguished='RY'>
+        <parameters idref='LMParameters.s:$(n)'/>
+    </substModel>
+    <parameter id="LMParameters.s:$(n)" dimension="1" value="0" lower="-1.0" upper="1.0"/>
+    <operator id="LMMRandomWalk.c:$(n)" spec="RealRandomWalkOperator" windowSize='0.2' weight="10" parameter="@LMParameters.s:$(n)"/>
+
+]]>
+            <connect srcID='LMMRandomWalk.c:$(n)' targetID='mcmc' inputName='operator'
+                     if='inlikelihood(LieMarkovModel.s:$(n))'/>
+                     
+            <connect srcID='LMParameters.s:$(n)' targetID='tracelog' inputName='log'
+                     if='inlikelihood(LieMarkovModel.s:$(n))'/>
+            <connect srcID='LMParameters.s:$(n)' targetID='state' inputName='stateNode'
+                     if='inlikelihood(LieMarkovModel.s:$(n))'/>
+        </subtemplate>
+</mergewith>
+</beast>
+
