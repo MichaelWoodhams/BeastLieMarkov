@@ -1,0 +1,3 @@
+<addon name='LMM' version='1.0.0'>
+	<depends on='beast2' atleast='2.1.0'/>
+</addon>
